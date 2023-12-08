@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:hwv="clr-namespace:HybridWebView;assembly=HybridWebView"
+             x:Class="MauiCSharpInteropWebView.MainPage">
+
+    <Grid ColumnDefinitions="2*,1*,1*" RowDefinitions="Auto,Auto,1*,3*">
+        <Label
+                Text="{Binding CurrentPageName}"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+        <Button Grid.Column="1"
+                Text="Send raw message to JS"
+                Clicked="OnSendRawMessageToJS"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding PageAllowsRawMessage}"
+                Margin="5" />
+
+        <Button Grid.Column="2"
+                Text="Invoke JS method"
+                Clicked="OnInvokeJSMethod"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding PageAllowsMethodInvoke}"
+                Margin="5"  />
+
+        <Label
+                Grid.Row="1" Grid.ColumnSpan="3" 
+                Text=".NET message log"
+                FontSize="16"
+                Margin="5"/>
+
+        <Editor Grid.Row="2" Grid.ColumnSpan="3" Text="{Binding MessageLog}" IsReadOnly="True" CursorPosition="{Binding MessageLogPosition}" />
+
+        <hwv:HybridWebView Grid.Row="3" Grid.ColumnSpan="3" x:Name="myHybridWebView" HybridAssetRoot="hybrid_root" MainFile="hybrid_app.html" RawMessageReceived="OnHybridWebViewRawMessageReceived" />
+    </Grid>
+
+</ContentPage>

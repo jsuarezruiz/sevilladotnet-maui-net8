@@ -1,0 +1,67 @@
+name: HybridWebView reusable build logic
+
+on:
+  workflow_call:
+    inputs:
+      publish-packages:
+        required: false
+        type: boolean
+        default: false
+       
+jobs:
+  build:
+    name: "Build"
+    runs-on: ${{ matrix.os }}
+    env:
+      DOTNET_NOLOGO: true
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    steps:
+      - name: Clone source
+        uses: actions/checkout@v3.1.0
+        with:
+          fetch-depth: 0
+
+      - name: Set XCode Version
+        shell: bash
+        run: |
+          sudo xcode-select -s "/Applications/Xcode_14.1.app"
+          echo "MD_APPLE_SDK_ROOT=/Applications/Xcode_14.1.app" >> $GITHUB_ENV
+        if: ${{ matrix.os == 'macos-latest' }}
+
+      - name: Install .NET 7 SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            7.0.100
+
+      - name: Install MAUI Workload
+        run: dotnet workload install maui --from-rollback-file https://maui.blob.core.windows.net/metadata/rollbacks/7.0.1xx.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json --source https://api.nuget.org/v3/index.json
+
+      - name: "Restore NuGet packages"
+        run: dotnet restore /p:Configuration=Release MauiCSharpInteropWebView.sln
+
+      - name: "Build and pack HybridWebView"
+        run: dotnet pack /p:Configuration=Release HybridWebView/HybridWebView.csproj
+
+      - name: "Build sample: MauiCSharpInteropWebView"
+        run: dotnet build /p:Configuration=Release MauiCSharpInteropWebView/MauiCSharpInteropWebView.csproj
+
+      - name: "Build sample: MauiReactJSHybridApp"
+        run: dotnet build /p:Configuration=Release MauiReactJSHybridApp/MauiReactJSHybridApp.csproj
+
+      - name: "Publish NuGet packages as artifacts"
+        uses: actions/upload-artifact@v3
+        with:
+          name: nuget-packages
+          path: 'artifacts/*.nupkg'
+        if: ${{ matrix.os == 'windows-latest' && inputs.publish-packages }}
+
+      - name: "Publish NuGet symbol packages as artifacts"
+        uses: actions/upload-artifact@v3
+        with:
+          name: nuget-packages
+          path: 'artifacts/*.snupkg'
+        if: ${{ matrix.os == 'windows-latest' && inputs.publish-packages }}

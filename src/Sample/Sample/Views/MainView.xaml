@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sample.Views.MainView"
+             Title="SevillaDotNet">
+    <VerticalStackLayout
+        Padding="12">
+        <Button 
+            Text="MenuBar"
+            Clicked="OnMenuBarButtonClicked"/>
+        <Button 
+            Text="Pointer Gesture"
+            Clicked="OnPointerGestureButtonClicked"/>
+        <Button 
+            Text="Windows DragAndDrop"
+            Clicked="OnDragAndDropButtonClicked"/>
+    </VerticalStackLayout>
+</ContentPage>

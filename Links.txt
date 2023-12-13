@@ -1,0 +1,15 @@
+Performance
+https://github.com/dotnet/maui/pull/14833
+https://github.com/dotnet/maui/pull/13304
+https://github.com/dotnet/maui/pull/14830
+https://github.com/dotnet/maui/pull/8849
+
+.NET MAUI VS Code Extension
+https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-maui
+https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit
+
+Material
+https://github.com/jsuarezruiz/sevilladotnet-maui-net8
+
+Related sessions
+https://www.youtube.com/watch?v=NE67DE2v8YM by Luis Betran
